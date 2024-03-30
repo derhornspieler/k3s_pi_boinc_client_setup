@@ -2,45 +2,45 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: rosettaathomedata
+  name: nfsathomedata
   namespace: boinc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rosettaathome
+  name: nfsathome
   namespace: boinc
   labels:
-    app: rosettaathome
+    app: nfsathome
 spec:
   replicas: 1
   template:
     metadata:
-      name: rosettaathome
+      name: nfsathome
       namespace: boinc
       labels:
-        app: rosettaathome
+        app: nfsathome
     spec:
       containers:
-        - name: rosettaathome
-          image: boinc/client
+        - name: nfsathome
+          image: boinc/client:arm64v8
           imagePullPolicy: Always
           env:
           - name: TZ
-            value: "America/New_York"
+            value: "America/Denver"
           - name: BOINC_GUI_RPC_PASSWORD
-            value: "123"
+            value: "password123456"
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           volumeMounts:
             - mountPath: /var/lib/boinc
-              name: rosettaathomedata
+              name: nfsathomedata
           ports:
           - containerPort: 80
             name: http
@@ -52,23 +52,23 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: rosettaathomedata
+        - name: nfsathomedata
           persistentVolumeClaim:
-            claimName: rosettaathomedata
+            claimName: nfsathomedata
   selector:
     matchLabels:
-      app: rosettaathome
+      app: nfsathome
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: rosettaathome
+  name: nfsathome
   namespace: boinc
   annotations:
-    metallb.universe.tf/address-pool: #Replace this comment with your MetalLB Pool Name
+    metallb.universe.tf/address-pool: default
 spec:
   selector:
-    app: rosettaathome
+    app: nfsathome
   ports:
     - port: 80
       name: http
