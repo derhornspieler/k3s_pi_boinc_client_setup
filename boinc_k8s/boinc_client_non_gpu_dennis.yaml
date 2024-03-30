@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: deniisathomedata
+  name: dennisathomedata
   namespace: boinc
 spec:
   accessModes:
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deniisathome
+  name: dennisathome
   namespace: boinc
   labels:
-    app: deniisathome
+    app: dennisathome
 spec:
   replicas: 1
   template:
     metadata:
-      name: deniisathome
+      name: dennisathome
       namespace: boinc
       labels:
-        app: deniisathome
+        app: dennisathome
     spec:
       containers:
-        - name: deniisathome
+        - name: dennisathome
           image: boinc/client:arm64v8
           imagePullPolicy: Always
           env:
@@ -40,7 +40,7 @@ spec:
             value: "--allow_remote_gui_rpc"
           volumeMounts:
             - mountPath: /var/lib/boinc
-              name: deniisathomedata
+              name: dennisathomedata
           ports:
           - containerPort: 80
             name: http
@@ -52,23 +52,23 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: deniisathomedata
+        - name: dennisathomedata
           persistentVolumeClaim:
-            claimName: deniisathomedata
+            claimName: dennisathomedata
   selector:
     matchLabels:
-      app: deniisathome
+      app: dennisathome
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: deniisathome
+  name: dennisathome
   namespace: boinc
   #annotations:
     #metallb.universe.tf/address-pool: default
 spec:
   selector:
-    app: deniisathome
+    app: dennisathome
   ports:
     - port: 80
       name: http
