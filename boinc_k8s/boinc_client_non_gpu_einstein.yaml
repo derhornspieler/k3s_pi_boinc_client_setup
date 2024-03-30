@@ -64,8 +64,8 @@ kind: Service
 metadata:
   name: ensteinathome
   namespace: boinc
-  annotations:
-    metallb.universe.tf/address-pool: default
+  #annotations:
+    #metallb.universe.tf/address-pool: default
 spec:
   selector:
     app: ensteinathome
