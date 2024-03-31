@@ -51,7 +51,7 @@ spec:
           - containerPort: 31416
             name: manager
             protocol: TCP
-      nodeName: node03
+      nodeName: node01
       volumes:
         - name: dennisathomedata
           persistentVolumeClaim:
