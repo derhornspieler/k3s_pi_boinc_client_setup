@@ -1,14 +1,4 @@
 ---
-apiVersion: v1
-kind: Pod
-metadata: 
-  name: astroidsathome
-spec:
-  containers:
-  - name: astroidsathome
-    image: boinc/client:arm64v8
-  nodeName: node04
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -61,6 +51,7 @@ spec:
           - containerPort: 31416
             name: manager
             protocol: TCP
+      nodeName: node04
       volumes:
         - name: astroidsathomedata
           persistentVolumeClaim:
