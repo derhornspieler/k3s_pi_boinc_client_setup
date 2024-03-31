@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: ensteinathome
-          image: boinc/client:arm64v8
+          image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
           - name: TZ
