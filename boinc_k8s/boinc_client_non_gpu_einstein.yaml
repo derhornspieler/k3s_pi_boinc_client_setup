@@ -51,7 +51,6 @@ spec:
           - containerPort: 31416
             name: manager
             protocol: TCP
-      nodeName: node04
       volumes:
         - name: ensteinathomedata
           persistentVolumeClaim:

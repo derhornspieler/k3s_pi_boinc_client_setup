@@ -51,7 +51,6 @@ spec:
           - containerPort: 31416
             name: manager
             protocol: TCP
-      nodeName: node03
       volumes:
         - name: rosettaathomedata
           persistentVolumeClaim:
