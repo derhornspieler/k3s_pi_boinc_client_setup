@@ -1,4 +1,14 @@
 ---
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: ensteinathome
+spec:
+  containers:
+  - name: ensteinathome
+    image: boinc/client:arm64v8
+  nodeName: node04
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
