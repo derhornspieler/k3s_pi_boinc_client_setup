@@ -51,7 +51,7 @@ spec:
           - containerPort: 31416
             name: manager
             protocol: TCP
-      nodeName: node04
+      nodeName: node02
       volumes:
         - name: astroidsathomedata
           persistentVolumeClaim:
