@@ -8,7 +8,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 50Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -18,31 +18,28 @@ metadata:
   labels:
     app: boinc-deployment
 spec:
-  replicas: 10
-  selector:
-    matchLabels:
-      app: boinc-deployment
+  replicas: 1
   template:
     metadata:
       labels:
         app: boinc-deployment
     spec:
       containers:
-      - name: boinc
-        image: ghcr.io/linuxserver/boinc:arm64v8-latest    # arm64	arm64v8-latest
-        env:
-        - name: BOINC_CMD_LINE_OPTIONS
-          value: "--acct_mgr attach scienceunited.org $SECRET_USERNAME $SECRET_PASSWORD"
-        - name: BOINC_CMD_LINE_OPTIONS  
-          value: "--allow_remote_gui_rpc"
-        - name: SECRET_USERNAME
-          value: "{{ secrets.USERNAME }}"
-        - name: SECRET_PASSWORD
-          value: "{{ secrets.PASSWORD }}"
-        - name: TZ
-          value: "America/Denver"
-        - name: BOINC_GUI_RPC_PASSWORD
-          value: "123"
+        - name: boinc
+          image: ghcr.io/linuxserver/boinc:arm64v8-latest    # arm64	arm64v8-latest
+          env:
+          - name: BOINC_CMD_LINE_OPTIONS
+            value: "--acct_mgr attach scienceunited.org $SECRET_USERNAME $SECRET_PASSWORD"
+          - name: BOINC_CMD_LINE_OPTIONS  
+            value: "--allow_remote_gui_rpc"
+          - name: SECRET_USERNAME
+            value: "{{ secrets.USERNAME }}"
+          - name: SECRET_PASSWORD
+            value: "{{ secrets.PASSWORD }}"
+          - name: TZ
+            value: "America/Denver"
+          - name: BOINC_GUI_RPC_PASSWORD
+            value: "123"
           volumeMounts:
             - mountPath: /var/lib/boinc
               name: boincdata
@@ -57,7 +54,7 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: astroidsathomedata
+        - name: boincdata
           persistentVolumeClaim:
             claimName: boincdata
   selector:
