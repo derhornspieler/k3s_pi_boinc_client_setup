@@ -43,7 +43,7 @@ spec:
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/sh"]
-          args: ["-c", "boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
+          args: ["-c", "echo 123 > /var/lib/boinc/gui_rpc_auth.cfg; boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
             - mountPath: /var/lib/boinc
               name: astroidsathomedata
