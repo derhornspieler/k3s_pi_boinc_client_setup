@@ -29,7 +29,7 @@ spec:
     spec:
       containers:  
         - name: astroidsathome
-          image: ubuntu:latest
+          image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
           - name: USERNAME  
@@ -43,7 +43,7 @@ spec:
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/sh"]
-          args: ["-c", "addgroup render; apt-get update; apt-get install software-properties-common -y; add-apt-repository universe; apt-get update; apt-get install boinc-client -y; systemctl enable --now boinc-client; ps aux | grep boinc; boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
+          args: ["-c", "boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
             - mountPath: /var/lib/boinc
               name: astroidsathomedata
