@@ -45,7 +45,7 @@ spec:
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/sh"]
-          args: ["-c", "/config/./boinccmd --acct_mgr attach scienceunited.org james.rudisill@protonmail.com $MGR_PASSWORD"]
+          args: ["-c", "cd /config && boinccmd --acct_mgr attach scienceunited.org james.rudisill@protonmail.com $MGR_PASSWORD"]
           volumeMounts:
             - mountPath: /config
               name: data
