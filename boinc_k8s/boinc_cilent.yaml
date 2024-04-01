@@ -14,17 +14,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: boinc-deployment
+  namespace: boinc
   labels:
-    app: boinc
+    app: boinc-deployment
 spec:
   replicas: 10
   selector:
     matchLabels:
-      app: boinc
+      app: boinc-deployment
   template:
     metadata:
       labels:
-        app: boinc
+        app: boinc-deployment
     spec:
       containers:
       - name: boinc
@@ -59,6 +60,9 @@ spec:
         - name: astroidsathomedata
           persistentVolumeClaim:
             claimName: boincdata
+  selector:
+    matchLabels:
+      app: boinc-deployment
 ---
 apiVersion: v1
 kind: Service
