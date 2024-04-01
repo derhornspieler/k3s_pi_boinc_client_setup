@@ -66,9 +66,9 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: boinc-data-01
+        - name: boinc-data-03
           persistentVolumeClaim:
-            claimName: boinc-data-01
+            claimName: boinc-data-03
   selector:
     matchLabels:
       app: boinc-03
