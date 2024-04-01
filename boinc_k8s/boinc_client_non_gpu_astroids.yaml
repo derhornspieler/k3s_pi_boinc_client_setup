@@ -43,7 +43,7 @@ spec:
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/sh"]
-          args: ["-c", "apt install boinc-client -y; boinccmd attach scienceunited.org $USERNAME $PASSWORD"]
+          args: ["-c", "apt-get update; apt-get install boinc-client -y; boinccmd attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
             - mountPath: /var/lib/boinc
               name: astroidsathomedata
