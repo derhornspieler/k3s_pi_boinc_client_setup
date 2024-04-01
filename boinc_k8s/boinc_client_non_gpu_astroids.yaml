@@ -29,7 +29,7 @@ spec:
     spec:
       containers:  
         - name: astroidsathome
-          image: ubuntu:latest
+          image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
           - name: USERNAME  
@@ -42,10 +42,10 @@ spec:
             value: "123"
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
-          command: ["/bin/sh"]
-          args: ["-c", "addgroup render; apt-get update; apt-get install software-properties-common -y; add-apt-repository universe; apt-get update; apt-get install boinc-client -y;]
+          #command: ["/bin/sh"]
+          #args: ["-c", "addgroup render; apt-get update; apt-get install software-properties-common -y; add-apt-repository universe; apt-get update; apt-get install boinc-client -y;]
           volumeMounts:
-            - mountPath: /etc/boinc
+            - mountPath: /config
               name: astroidsathomedata
           ports:
           - containerPort: 80
@@ -54,6 +54,12 @@ spec:
           - containerPort: 443
             name: https
             protocol: TCP
+          - containerPort: 8181
+            name: https
+            protocol: TCP
+          - containerPort: 8080
+            name: http
+            protocol: TCP            
           - containerPort: 31416
             name: manager
             protocol: TCP
@@ -85,4 +91,10 @@ spec:
     - port: 31416
       name: manager
       protocol: TCP
+    - port: 8181
+      name: https
+      protocol: TCP
+    - port: 8080
+      name: http
+      protocol: TCP        
   type: LoadBalancer
