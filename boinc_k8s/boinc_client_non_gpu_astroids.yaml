@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: astroidsathomedata
+  name: data
   namespace: boinc
 spec:
   accessModes:
@@ -14,24 +14,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: astroidsathome
+  name: boinc-cluster
   namespace: boinc
   labels:
-    app: astroidsathome
+    app: boinc-cluster
 spec:
   replicas: 1
   template:
     metadata:
-      name: astroidsathome
+      name: boinc-cluster
       namespace: boinc
       labels:
-        app: astroidsathome
+        app: boinc-cluster
     spec:
       containers:  
-        - name: astroidsathome
+        - name: boinc-cluster
           image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
+          - name: CUSTOM_USER
+            value: "admin"
           - name: USERNAME  
             value: "${{ secrets.USERNAME }}"
           - name: PASSWORD
@@ -46,7 +48,7 @@ spec:
           args: ["-c", "cd /config; boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
             - mountPath: /config
-              name: astroidsathomedata
+              name: data
           ports:
           - containerPort: 80
             name: http
@@ -64,23 +66,23 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: astroidsathomedata
+        - name: data
           persistentVolumeClaim:
-            claimName: astroidsathomedata
+            claimName: data
   selector:
     matchLabels:
-      app: astroidsathome
+      app: boinc-cluster
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: astroidsathome
+  name: boinc-cluster
   namespace: boinc
   #annotations:
     #metallb.universe.tf/address-pool: default
 spec:
   selector:
-    app: astroidsathome
+    app: boinc-cluster
   ports:
     - port: 80
       name: http
