@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: boinc-test
+  name: boinc-test-data
   namespace: boinc
 spec:
   accessModes:
