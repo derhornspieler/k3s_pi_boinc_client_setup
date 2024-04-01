@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: rnaworlddata
+  name: astroidsathomedata
   namespace: boinc
 spec:
   accessModes:
@@ -14,33 +14,39 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rnaworld
+  name: astroidsathome
   namespace: boinc
   labels:
-    app: rnaworld
+    app: astroidsathome
 spec:
   replicas: 1
   template:
     metadata:
-      name: rnaworld
+      name: astroidsathome
       namespace: boinc
       labels:
-        app: rnaworld
+        app: astroidsathome
     spec:
-      containers:
-        - name: rnaworld
-          image: boinc/client:arm64v8
+      containers:  
+        - name: astroidsathome
+          image: ubuntu:latest
           imagePullPolicy: Always
           env:
+          - name: USERNAME  
+            value: "${{ secrets.USERNAME }}"
+          - name: PASSWORD
+            value: "${{ secrets.PASSWORD }}"
           - name: TZ
             value: "America/Denver"
           - name: BOINC_GUI_RPC_PASSWORD
-            value: "password123456"
+            value: "123"
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
+          command: ["/bin/sh"]
+          args: ["-c", "addgroup render; apt-get update; apt-get install software-properties-common -y; add-apt-repository universe; apt-get update; apt-get install boinc-client -y; cd /etc/boinc/; boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
-            - mountPath: /var/lib/boinc
-              name: rnaworlddata
+            - mountPath: /etc/boinc
+              name: astroidsathomedata
           ports:
           - containerPort: 80
             name: http
@@ -52,23 +58,23 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: rnaworlddata
+        - name: astroidsathomedata
           persistentVolumeClaim:
-            claimName: rnaworlddata
+            claimName: astroidsathomedata
   selector:
     matchLabels:
-      app: rnaworld
+      app: astroidsathome
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: rnaworld
+  name: astroidsathome
   namespace: boinc
   #annotations:
     #metallb.universe.tf/address-pool: default
 spec:
   selector:
-    app: rnaworld
+    app: astroidsathome
   ports:
     - port: 80
       name: http
