@@ -1,48 +1,52 @@
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: boincdata
+  name: astroidsathomedata
   namespace: boinc
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 10Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: boinc-deployment
+  name: astroidsathome
   namespace: boinc
   labels:
-    app: boinc-deployment
+    app: astroidsathome
 spec:
   replicas: 1
   template:
     metadata:
+      name: astroidsathome
+      namespace: boinc
       labels:
-        app: boinc-deployment
+        app: astroidsathome
     spec:
-      containers:
-        - name: boinc
-          image: ghcr.io/linuxserver/boinc:arm64v8-latest    # arm64	arm64v8-latest
+      containers:  
+        - name: astroidsathome
+          image: boinc/client:arm64v8
+          imagePullPolicy: Always
           env:
-          - name: BOINC_CMD_LINE_OPTIONS
-            value: "--acct_mgr attach scienceunited.org $SECRET_USERNAME $SECRET_PASSWORD"
-          - name: BOINC_CMD_LINE_OPTIONS  
-            value: "--allow_remote_gui_rpc"
-          - name: SECRET_USERNAME
-            value: "{{ secrets.USERNAME }}"
-          - name: SECRET_PASSWORD
-            value: "{{ secrets.PASSWORD }}"
+          - name: USERNAME  
+            value: ${{ secrets.USERNAME }}
+          - name: PASSWORD
+            value: ${{ secrets.PASSWORD }}
           - name: TZ
             value: "America/Denver"
           - name: BOINC_GUI_RPC_PASSWORD
             value: "123"
+          - name: BOINC_CMD_LINE_OPTIONS
+            value: "--allow_remote_gui_rpc"
+          command: ["/bin/sh"]
+          args: ["-c", "cat /etc/os-release; sudo apt purge boinc*; sudo add-apt-repository --remove ppa:costamagnagianfranco/boinc; add-apt-repository universe; sudo apt update; apt install boinc-client; systemctl enable --now boinc-client; ps aux | grep boinc; boinccmd --acct_mgr attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
             - mountPath: /var/lib/boinc
-              name: boincdata
+              name: astroidsathomedata
           ports:
           - containerPort: 80
             name: http
@@ -54,23 +58,23 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: boincdata
+        - name: astroidsathomedata
           persistentVolumeClaim:
-            claimName: boincdata
+            claimName: astroidsathomedata
   selector:
     matchLabels:
-      app: boinc-deployment
+      app: astroidsathome
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: boinc-deployment
+  name: astroidsathome
   namespace: boinc
   #annotations:
     #metallb.universe.tf/address-pool: default
 spec:
   selector:
-    app: boinc-deployment
+    app: astroidsathome
   ports:
     - port: 80
       name: http
@@ -82,4 +86,3 @@ spec:
       name: manager
       protocol: TCP
   type: LoadBalancer
-        
