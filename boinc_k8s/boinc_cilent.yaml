@@ -31,7 +31,7 @@ spec:
         image: ghcr.io/linuxserver/boinc:arm64v8-latest    # arm64	arm64v8-latest
         env:
         - name: BOINC_CMD_LINE_OPTIONS
-          value: "--acct_mgr attach https://scienceunited.org/ $SECRET_USERNAME $SECRET_PASSWORD"
+          value: "--acct_mgr attach scienceunited.org $SECRET_USERNAME $SECRET_PASSWORD"
         - name: BOINC_CMD_LINE_OPTIONS  
           value: "--allow_remote_gui_rpc"
         - name: SECRET_USERNAME
