@@ -6,7 +6,7 @@ metadata:
   namespace: boinc
 spec:
   accessModes:
-    - ReadWritepOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
