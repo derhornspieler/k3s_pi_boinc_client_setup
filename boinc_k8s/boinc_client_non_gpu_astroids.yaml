@@ -29,7 +29,7 @@ spec:
     spec:
       containers:  
         - name: astroidsathome
-          image: arm64v8/debian:latest
+          image: ubuntu:latest
           imagePullPolicy: Always
           env:
           - name: USERNAME  
