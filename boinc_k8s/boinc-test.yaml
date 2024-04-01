@@ -1,0 +1,84 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: boinc-test
+  namespace: boinc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boinc-test
+  namespace: boinc
+  labels:
+    app: boinc-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: boinc-test
+      namespace: boinc
+      labels:
+        app: boinc-test
+    spec:
+      containers:  
+        - name: boinc-test
+          image: arm64v8/debian:latest
+          imagePullPolicy: Always
+          env:
+          - name: TZ
+            value: "America/Denver"
+          - name: BOINC_GUI_RPC_PASSWORD
+            value: "123"
+          - name: BOINC_CMD_LINE_OPTIONS
+            value: "--allow_remote_gui_rpc"
+          command: ["/bin/bash"]
+          args: ["-c", "sudo apt-get update; sudo apt-get install boinc-client"]
+          volumeMounts:
+            - mountPath: /var/lib/boinc
+              name: boinc-test-data
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          - containerPort: 443
+            name: https
+            protocol: TCP           
+          - containerPort: 31416
+            name: manager
+            protocol: TCP
+      volumes:
+        - name: boinc-data-test
+          persistentVolumeClaim:
+            claimName: boinc-data-test
+  selector:
+    matchLabels:
+      app: boinc-test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: boinc-test
+  namespace: boinc
+  #annotations:
+    #metallb.universe.tf/address-pool: default
+spec:
+  selector:
+    app: boinc-test
+  ports:
+    - port: 80
+      name: http
+      protocol: TCP
+    - port: 443
+      name: https
+      protocol: TCP
+    - port: 31416
+      name: manager
+      protocol: TCP       
+  type: LoadBalancer
