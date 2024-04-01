@@ -35,9 +35,9 @@ spec:
           - name: CUSTOM_USER
             value: "admin"
           - name: USERNAME  
-            value: "${{ secrets.USERNAME }}"
+            value: ${{ env.USERNAME }}
           - name: MGR_PASSWORD
-            value: ${{ secrets.PASSWORD }}
+            value: ${{ env.PASSWORD }}
           - name: TZ
             value: "America/Denver"
           - name: BOINC_GUI_RPC_PASSWORD
@@ -45,7 +45,7 @@ spec:
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/bash"]
-          args: ["-c", "cd /config && boinccmd --acct_mgr attach scienceunited.org $USERNAME $MGR_PASSWORD"]
+          args: ["-c", "cd /config; boinccmd --acct_mgr attach https://scienceunited.org $USERNAME $MGR_PASSWORD"]
           volumeMounts:
             - mountPath: /config
               name: data
