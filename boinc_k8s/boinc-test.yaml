@@ -39,7 +39,7 @@ spec:
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/bash"]
-          args: ["-c", "sudo apt-get update; sudo apt-get install boinc-client"]
+          args: ["-c", "apt-get update && apt-get upgrade -y && apt-get install boinc-client -y"]
           volumeMounts:
             - mountPath: /var/lib/boinc
               name: boinc-data-test
