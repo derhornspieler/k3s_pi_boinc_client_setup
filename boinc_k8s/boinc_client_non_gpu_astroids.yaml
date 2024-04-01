@@ -39,7 +39,7 @@ spec:
           - name: TZ
             value: "America/Denver"
           - name: BOINC_GUI_RPC_PASSWORD
-            value: ${{ secrets.PASSWORD }}
+            value: "123"
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
           command: ["/bin/sh"]
