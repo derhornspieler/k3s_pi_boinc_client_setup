@@ -29,15 +29,21 @@ spec:
     spec:
       containers:  
         - name: astroidsathome
-          image: lscr.io/linuxserver/boinc:latest
+          image: arm64v8/debian:latest
           imagePullPolicy: Always
           env:
+          - name: USERNAME  
+            value: ${{ secrets.USERNAME }}
+          - name: PASSWORD
+            value: ${{ secrets.PASSWORD }}
           - name: TZ
             value: "America/Denver"
           - name: BOINC_GUI_RPC_PASSWORD
-            value: "password123456"
+            value: ${{ secrets.PASSWORD }}
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
+          command: ["/bin/sh"]
+          args: ["-c", "apt install boinc-client -y; boinccmd attach scienceunited.org $USERNAME $PASSWORD"]
           volumeMounts:
             - mountPath: /var/lib/boinc
               name: astroidsathomedata
