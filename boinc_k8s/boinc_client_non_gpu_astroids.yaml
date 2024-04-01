@@ -32,10 +32,10 @@ spec:
           image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
-          #- name: CUSTOM_USER
-          #  value: "admin"
-          #- name: USERNAME  
-          #  value: "${{ secrets.USERNAME }}"
+          - name: CUSTOM_USER
+            value: "admin"
+          - name: USERNAME  
+            value: "${{ secrets.USERNAME }}"
           - name: MGR_PASSWORD
             value: ${{ secrets.PASSWORD }}
           - name: TZ
@@ -44,8 +44,8 @@ spec:
             value: "123"
           - name: BOINC_CMD_LINE_OPTIONS
             value: "--allow_remote_gui_rpc"
-          #command: ["/bin/sh"]
-          #args: ["-c", "boinccmd --acct_mgr attach scienceunited.org james.rudisill@protonmail.com $MGR_PASSWORD"]
+          command: ["/bin/bash"]
+          args: ["-c", "boinccmd --acct_mgr attach scienceunited.org '$USERNAME' '$MGR_PASSWORD'"]
           volumeMounts:
             - mountPath: /config
               name: data
