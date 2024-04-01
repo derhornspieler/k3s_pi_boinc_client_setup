@@ -55,10 +55,10 @@ spec:
             name: https
             protocol: TCP
           - containerPort: 8181
-            name: https
+            name: https-gui
             protocol: TCP
           - containerPort: 8080
-            name: http
+            name: http-gui
             protocol: TCP            
           - containerPort: 31416
             name: manager
@@ -92,9 +92,9 @@ spec:
       name: manager
       protocol: TCP
     - port: 8181
-      name: https
+      name: https-gui
       protocol: TCP
     - port: 8080
-      name: http
+      name: http-gui
       protocol: TCP        
   type: LoadBalancer
