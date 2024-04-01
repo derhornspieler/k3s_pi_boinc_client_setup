@@ -1,0 +1,84 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: boincdata
+  namespace: boinc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boinc-deployment
+  labels:
+    app: boinc
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: boinc
+  template:
+    metadata:
+      labels:
+        app: boinc
+    spec:
+      containers:
+      - name: boinc
+        image: ghcr.io/linuxserver/boinc:arm64v8-latest    # arm64	arm64v8-latest
+        env:
+        - name: BOINC_CMD_LINE_OPTIONS
+          value: "--acct_mgr attach https://scienceunited.org/ $SECRET_USERNAME $SECRET_PASSWORD"
+        - name: BOINC_CMD_LINE_OPTIONS  
+          value: "--allow_remote_gui_rpc"
+        - name: SECRET_USERNAME
+          value: "{{ secrets.USERNAME }}"
+        - name: SECRET_PASSWORD
+          value: "{{ secrets.PASSWORD }}"
+        - name: TZ
+          value: "America/Denver"
+        - name: BOINC_GUI_RPC_PASSWORD
+          value: "123"
+          volumeMounts:
+            - mountPath: /var/lib/boinc
+              name: boincdata
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          - containerPort: 443
+            name: https
+            protocol: TCP
+          - containerPort: 31416
+            name: manager
+            protocol: TCP
+      volumes:
+        - name: astroidsathomedata
+          persistentVolumeClaim:
+            claimName: boincdata
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: boinc-deployment
+  namespace: boinc
+  #annotations:
+    #metallb.universe.tf/address-pool: default
+spec:
+  selector:
+    app: boinc-deployment
+  ports:
+    - port: 80
+      name: http
+      protocol: TCP
+    - port: 443
+      name: https
+      protocol: TCP
+    - port: 31416
+      name: manager
+      protocol: TCP
+  type: LoadBalancer
+        
