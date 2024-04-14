@@ -72,31 +72,31 @@ spec:
   selector:
     matchLabels:
       app: boinc-05
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: boinc-05
-  namespace: boinc
-  #annotations:
-    #metallb.universe.tf/address-pool: default
-spec:
-  selector:
-    app: boinc-05
-  ports:
-    - port: 80
-      name: http
-      protocol: TCP
-    - port: 443
-      name: https
-      protocol: TCP
-    - port: 31416
-      name: manager
-      protocol: TCP
-    - port: 8181
-      name: https-gui
-      protocol: TCP
-    - port: 8080
-      name: http-gui
-      protocol: TCP        
-  type: LoadBalancer
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: boinc-05
+#   namespace: boinc
+#   #annotations:
+#     #metallb.universe.tf/address-pool: default
+# spec:
+#   selector:
+#     app: boinc-05
+#   ports:
+#     - port: 80
+#       name: http
+#       protocol: TCP
+#     - port: 443
+#       name: https
+#       protocol: TCP
+#     - port: 31416
+#       name: manager
+#       protocol: TCP
+#     - port: 8181
+#       name: https-gui
+#       protocol: TCP
+#     - port: 8080
+#       name: http-gui
+#       protocol: TCP        
+#   type: LoadBalancer
