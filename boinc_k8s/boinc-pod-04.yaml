@@ -19,7 +19,7 @@ metadata:
   labels:
     app: boinc-04
 spec:
-  nodeName: node02
+  nodeName: node04
   replicas: 1
   template:
     metadata:
