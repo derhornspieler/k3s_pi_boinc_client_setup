@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: boinc-data-09
+  name: boinc-data-10
   namespace: boinc
 spec:
   accessModes:
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: boinc-09
+  name: boinc-10
   namespace: boinc
   labels:
-    app: boinc-09
+    app: boinc-10
 spec:
   replicas: 1
   template:
     metadata:
-      name: boinc-09
+      name: boinc-10
       namespace: boinc
       labels:
-        app: boinc-09
+        app: boinc-10
     spec:
       containers:  
-        - name: boinc-09
+        - name: boinc-10
           image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
@@ -48,7 +48,7 @@ spec:
           #args: ["-c", "cd /config; boinccmd --acct_mgr attach https://scienceunited.org $USERNAME $MGR_PASSWORD"]
           volumeMounts:
             - mountPath: /config
-              name: boinc-data-09
+              name: boinc-data-10
           ports:
           - containerPort: 80
             name: http
@@ -66,37 +66,37 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: boinc-data-09
+        - name: boinc-data-10
           persistentVolumeClaim:
-            claimName: boinc-data-09
+            claimName: boinc-data-10
   selector:
     matchLabels:
-      app: boinc-09
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: boinc-09
-  namespace: boinc
-  #annotations:
-    #metallb.universe.tf/address-pool: default
-spec:
-  selector:
-    app: boinc-09
-  ports:
-    - port: 80
-      name: http
-      protocol: TCP
-    - port: 443
-      name: https
-      protocol: TCP
-    - port: 31416
-      name: manager
-      protocol: TCP
-    - port: 8181
-      name: https-gui
-      protocol: TCP
-    - port: 8080
-      name: http-gui
-      protocol: TCP        
-  type: LoadBalancer
+      app: boinc-10
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: boinc-10
+#   namespace: boinc
+#   #annotations:
+#     #metallb.universe.tf/address-pool: default
+# spec:
+#   selector:
+#     app: boinc-10
+#   ports:
+#     - port: 80
+#       name: http
+#       protocol: TCP
+#     - port: 443
+#       name: https
+#       protocol: TCP
+#     - port: 31416
+#       name: manager
+#       protocol: TCP
+#     - port: 8181
+#       name: https-gui
+#       protocol: TCP
+#     - port: 8080
+#       name: http-gui
+#       protocol: TCP        
+#   type: LoadBalancer
