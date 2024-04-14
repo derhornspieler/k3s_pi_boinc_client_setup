@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: boinc-data-01
+  name: boinc-data
   namespace: boinc
 spec:
   accessModes:
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: boinc-01
+  name: boinc
   namespace: boinc
   labels:
-    app: boinc-01
+    app: boinc
 spec:
   replicas: 4
   template:
     metadata:
-      name: boinc-01
+      name: boinc
       namespace: boinc
       labels:
-        app: boinc-01
+        app: boinc
     spec:
       containers:  
-        - name: boinc-01
+        - name: boinc
           image: lscr.io/linuxserver/boinc:latest
           imagePullPolicy: Always
           env:
@@ -48,7 +48,7 @@ spec:
           #args: ["-c", "cd /config; boinccmd --acct_mgr attach https://scienceunited.org $USERNAME $MGR_PASSWORD"]
           volumeMounts:
             - mountPath: /config
-              name: boinc-data-01
+              name: boinc-data
           ports:
           - containerPort: 80
             name: http
@@ -66,23 +66,23 @@ spec:
             name: manager
             protocol: TCP
       volumes:
-        - name: boinc-data-01
+        - name: boinc-data
           persistentVolumeClaim:
-            claimName: boinc-data-01
+            claimName: boinc-data
   selector:
     matchLabels:
-      app: boinc-01
+      app: boinc
 # ---
 # apiVersion: v1
 # kind: Service
 # metadata:
-#   name: boinc-01
+#   name: boinc
 #   namespace: boinc
 #   #annotations:
 #     #metallb.universe.tf/address-pool: default
 # spec:
 #   selector:
-#     app: boinc-01
+#     app: boinc
 #   ports:
 #     - port: 80
 #       name: http
