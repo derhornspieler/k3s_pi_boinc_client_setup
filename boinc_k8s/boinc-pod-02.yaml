@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 50Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -19,6 +19,7 @@ metadata:
   labels:
     app: boinc-02
 spec:
+  nodeName: node02
   replicas: 1
   template:
     metadata:
