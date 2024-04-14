@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 50Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -27,6 +27,7 @@ spec:
       labels:
         app: boinc-05
     spec:
+      nodeName: node05
       containers:  
         - name: boinc-05
           image: lscr.io/linuxserver/boinc:latest
