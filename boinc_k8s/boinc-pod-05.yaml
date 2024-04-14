@@ -99,4 +99,4 @@ spec:
 #     - port: 8080
 #       name: http-gui
 #       protocol: TCP        
-#   type: LoadBalancer
+#   type: LoadBalancer.
