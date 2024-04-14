@@ -6,10 +6,10 @@ metadata:
   namespace: boinc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 100Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -19,7 +19,7 @@ metadata:
   labels:
     app: boinc-01
 spec:
-  replicas: 1
+  replicas: 4
   template:
     metadata:
       name: boinc-01
