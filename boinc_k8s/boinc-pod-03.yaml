@@ -1,0 +1,102 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: boinc-data-03
+  namespace: boinc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boinc-03
+  namespace: boinc
+  labels:
+    app: boinc-03
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: boinc-03
+      namespace: boinc
+      labels:
+        app: boinc-03
+    spec:
+      containers:  
+        - name: boinc-03
+          image: lscr.io/linuxserver/boinc:latest
+          imagePullPolicy: Always
+          env:
+          - name: CUSTOM_USER
+            value: "admin"
+          #- name: USERNAME  
+          #  value: ${{ env.USERNAME }}
+          #- name: MGR_PASSWORD
+          #  value: ${{ env.PASSWORD }}
+          - name: TZ
+            value: "America/Denver"
+          - name: BOINC_GUI_RPC_PASSWORD
+            value: "123"
+          - name: BOINC_CMD_LINE_OPTIONS
+            value: "--allow_remote_gui_rpc"
+          #command: ["/bin/bash"]
+          #args: ["-c", "cd /config; boinccmd --acct_mgr attach https://scienceunited.org $USERNAME $MGR_PASSWORD"]
+          volumeMounts:
+            - mountPath: /config
+              name: boinc-data-03
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          - containerPort: 443
+            name: https
+            protocol: TCP
+          - containerPort: 8181
+            name: https-gui
+            protocol: TCP
+          - containerPort: 8080
+            name: http-gui
+            protocol: TCP            
+          - containerPort: 31416
+            name: manager
+            protocol: TCP
+      volumes:
+        - name: boinc-data-03
+          persistentVolumeClaim:
+            claimName: boinc-data-03
+  selector:
+    matchLabels:
+      app: boinc-03
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: boinc-03
+#   namespace: boinc
+#   #annotations:
+#     #metallb.universe.tf/address-pool: default
+# spec:
+#   selector:
+#     app: boinc-03
+#   ports:
+#     - port: 80
+#       name: http
+#       protocol: TCP
+#     - port: 443
+#       name: https
+#       protocol: TCP
+#     - port: 31416
+#       name: manager
+#       protocol: TCP
+#     - port: 8181
+#       name: https-gui
+#       protocol: TCP
+#     - port: 8080
+#       name: http-gui
+#       protocol: TCP        
+#   type: LoadBalancer
