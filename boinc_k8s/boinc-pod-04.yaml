@@ -19,7 +19,6 @@ metadata:
   labels:
     app: boinc-04
 spec:
-  nodeName: node04
   replicas: 1
   template:
     metadata:
@@ -28,6 +27,7 @@ spec:
       labels:
         app: boinc-04
     spec:
+      nodeName: node04
       containers:  
         - name: boinc-04
           image: lscr.io/linuxserver/boinc:latest
