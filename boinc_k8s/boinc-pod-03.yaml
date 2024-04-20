@@ -19,7 +19,7 @@ metadata:
   labels:
     app: boinc-03
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       name: boinc-03
